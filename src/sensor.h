@@ -5,6 +5,7 @@
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
+#include <ArduinoJson.h>
 
 #define BME_SCK 13
 #define BME_MISO 12
@@ -58,6 +59,21 @@ void logSensorValues()
     Serial.println(" %");
 
     Serial.println();
+}
+
+String getValuesAsJSONString()
+{
+    const size_t capacity = JSON_OBJECT_SIZE(3);
+    DynamicJsonBuffer jsonBuffer(capacity);
+
+    JsonObject &root = jsonBuffer.createObject();
+    root["temperature"] = 25.23;
+    root["pressure"] = 1018.4;
+    root["humidty"] = 90.12;
+
+    String message = "";
+    root.printTo(message);
+    return message;
 }
 
 #endif

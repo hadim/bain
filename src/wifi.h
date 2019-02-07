@@ -57,14 +57,14 @@ void logWifiInformations()
     logEncryption();
 }
 
-void connectWifi(const char *ssid, const char *password)
+void connectWifi(const char *wifi_ssid, const char *wifi_password)
 {
     if (WiFi.status() != WL_CONNECTED)
     {
-        WiFi.begin(ssid, password);
+        WiFi.begin(wifi_ssid, wifi_password);
 
         Serial.print("Connecting to: ");
-        Serial.println(ssid);
+        Serial.println(wifi_ssid);
         Serial.println();
 
         while (WiFi.status() != WL_CONNECTED)
