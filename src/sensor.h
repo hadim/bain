@@ -61,15 +61,19 @@ void logSensorValues()
     Serial.println();
 }
 
-String getValuesAsJSONString()
+String getValuesAsJSONString(String timestamp)
 {
-    const size_t capacity = JSON_OBJECT_SIZE(3);
+    const size_t capacity = JSON_OBJECT_SIZE(4) + 90;
     DynamicJsonBuffer jsonBuffer(capacity);
 
     JsonObject &root = jsonBuffer.createObject();
-    root["temperature"] = 25.23;
-    root["pressure"] = 1018.4;
-    root["humidty"] = 90.12;
+
+    root["temperature"] = bme.readTemperature();
+    root["pressure"] = bme.readPressure() / 100.0F;
+    root["humidty"] = bme.readHumidity();
+
+    const char *timestampChar = timestamp.c_str();
+    root["date"] = timestampChar;
 
     String message = "";
     root.printTo(message);

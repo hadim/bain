@@ -28,6 +28,7 @@ You also need to install the following Arduino libraries (use the **Arduino Libr
 - [Adafruit Unified Sensor](https://github.com/adafruit/Adafruit_Sensor): Needed for Adafruit BME280 Library.
 - [PubSubClient](https://github.com/knolleary/pubsubclient): MQTT Client.
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson): a JSON library. **Warning**: as of today (06/02/2019), you should install version 5 only and not version 6.
+- [NTPClient](https://github.com/arduino-libraries/NTPClient): an NTP client library to get date and time.
 
 Set WiFi parameters:
 
@@ -46,7 +47,8 @@ The sensor values are sent as a JSON string:
 {
   "temperature": 25.23,
   "pressure": 1018.4,
-  "humidty": 90.12
+  "humidty": 90.12,
+  "timestamp": 90.12
 }
 ```
 
