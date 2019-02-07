@@ -2,16 +2,16 @@
 
 Bain is a DIY wireless thermometer. It is made of two parts:
 
-- [Adafruit Feather HUZZAH with ESP8266](https://www.adafruit.com/product/2821): it's an Arduino compatible board that has WiFi and a connector to plug any Adafruit 3.7V Lithium polymer batteries.
+- [Adafruit Feather HUZZAH with ESP8266](https://www.adafruit.com/product/2821): it's an Arduino compatible board that has WiFi capability and a connector to plug any Adafruit 3.7V Lithium polymer batteries.
 - [Adafruit BME280 I2C or SPI](https://www.adafruit.com/product/2652): It's an environmental sensor with temperature, barometric pressure and humidity from Bosch.
 
-This repository contains all the instructions to build the thermometer yourself. Generated data are sent to an MQTT broker but the code should be easily adaptable to the most convenient method that fit your needs.
+This repository contains all the instructions to build the thermometer yourself. Generated data are sent to an MQTT broker but the code should be easily to modify to adapt to your needs.
 
 ## Instructions
 
 ### Assembly on a breadboard
 
-TODO
+We will first connect both boards together using a breadboard in order to check that the flash procedure works well.
 
 ### Flash the controller
 
@@ -24,7 +24,7 @@ Then in the **Arduino Board Manager**, install the `ESP8266` package. After this
 You also need to install the following Arduino libraries (use the **Arduino Library Manager**):
 
 - [Adafruit ESP8266](https://github.com/adafruit/Adafruit_ESP8266): Arduino board with WiFi capability.
-- [Adafruit BME280 Library](https://github.com/adafruit/Adafruit_BME280_Library): Sensor library
+- [Adafruit BME280 Library](https://github.com/adafruit/Adafruit_BME280_Library): Sensor library.
 - [Adafruit Unified Sensor](https://github.com/adafruit/Adafruit_Sensor): Needed for Adafruit BME280 Library.
 - [PubSubClient](https://github.com/knolleary/pubsubclient): MQTT Client.
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson): a JSON library. **Warning**: as of today (06/02/2019), you should install version 5 only and not version 6.
@@ -32,11 +32,11 @@ You also need to install the following Arduino libraries (use the **Arduino Libr
 Set WiFi parameters:
 
 - Copy `src/secret.h.template` to `src/secret.h`.
-- Edit `src/secret.h` to set WiFi SSID and WiFi password.
+- Edit `src/secret.h` to set WiFi and MQTT parameters.
 
 Now you're ready to flash your ESP8266 controller.
 
-- From you Arduino editor, open [`src/controller.ino`](src/controller.ino).
+- From you Arduino editor, open [`src/main.ino`](src/main.ino).
 - Compile it.
 - After connecting the ESP8266 board to your computer, upload the controller.
 

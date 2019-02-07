@@ -33,7 +33,17 @@ void connect(char *mqtt_client_id)
         Serial.println("Attempting MQTT connection.");
 
         // Attempt to connect
-        if (client.connect(mqtt_client_id))
+        boolean isConnected;
+        if(strlen(mqtt_username) == 0 || strlen(mqtt_password) == 0)
+        {
+            isConnected = client.connect(mqtt_client_id);
+        }
+        else
+        {
+            isConnected = client.connect(mqtt_client_id, mqtt_username, mqtt_password);
+        }
+
+        if (isConnected)
         {
             Serial.println("MQTT Client connected.");
         }
@@ -41,7 +51,7 @@ void connect(char *mqtt_client_id)
         {
             Serial.print("Failed, rc=");
             Serial.print(client.state());
-            Serial.println("Try again in 5 seconds");
+            Serial.println("Try again in 2 seconds.");
 
             // Wait 2 seconds before retrying
             delay(2000);

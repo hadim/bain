@@ -41,7 +41,7 @@ void initBME280Sensor()
 void sensorMeasure()
 {
     // Only needed in forced mode! In normal mode, you can remove the next line.
-    bme.takeForcedMeasurement(); // has no effect in normal mode
+    bme.takeForcedMeasurement(); // Has no effect in normal mode
 }
 
 void logSensorValues()
