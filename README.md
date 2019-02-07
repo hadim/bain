@@ -5,7 +5,16 @@ Bain is a DIY wireless thermometer. It is made of two parts:
 - [Adafruit Feather HUZZAH with ESP8266](https://www.adafruit.com/product/2821): it's an Arduino compatible board that has WiFi capability and a connector to plug any Adafruit 3.7V Lithium polymer batteries.
 - [Adafruit BME280 I2C or SPI](https://www.adafruit.com/product/2652): It's an environmental sensor with temperature, barometric pressure and humidity from Bosch.
 
-This repository contains all the instructions to build the thermometer yourself. Generated data are sent to an MQTT broker but the code should be easily to modify to adapt to your needs.
+This repository contains all the instructions to build the thermometer yourself.
+
+Features:
+
+- Monitor temperature, pressure and humidity.
+- Generated data are sent to a custom MQTT broker as a JSON string.
+- Time is syncronized every 6h with NTP and the timezone can be set.
+- A timestamp string is added to sensor data before they are sent.
+- Four LEDs can indicate current controller state (WiFi, sensor, MQTT, NTP).
+- The source code is profusely commented and factorized. It should be easily to adapt to your needs.
 
 ## Instructions
 
@@ -48,7 +57,7 @@ The sensor values are sent as a JSON string:
   "temperature": 25.23,
   "pressure": 1018.4,
   "humidty": 90.12,
-  "timestamp": 90.12
+  "timestamp": "2019-02-15 15:45:23"
 }
 ```
 
@@ -65,22 +74,22 @@ If you are using [Home Assistant](https://www.home-assistant.io) to retrieve the
 ```yaml
 sensor:
   - platform: mqtt
-    name: "Temperature 1"
-    state_topic: "bain_sensor/sensor1"
+    name: 'Temperature 1'
+    state_topic: 'bain_sensor/sensor1'
     unit_of_measurement: '°C'
-    value_template: "{{ value_json.temperature }}"
+    value_template: '{{ value_json.temperature }}'
 
   - platform: mqtt
-    name: "Humidity 1"
-    state_topic: "bain_sensor/sensor1"
+    name: 'Humidity 1'
+    state_topic: 'bain_sensor/sensor1'
     unit_of_measurement: '%'
-    value_template: "{{ value_json.humidity }}"
+    value_template: '{{ value_json.humidity }}'
 
   - platform: mqtt
-    name: "Pressure 1"
-    state_topic: "bain_sensor/sensor1"
+    name: 'Pressure 1'
+    state_topic: 'bain_sensor/sensor1'
     unit_of_measurement: 'hPa'
-    value_template: "{{ value_json.pressure }}"
+    value_template: '{{ value_json.pressure }}'
 ```
 
 ## License
@@ -90,4 +99,3 @@ sensor:
 ## Author
 
 - [Hadrien Mary](mailto:hadrien.mary_AT_gmail.com)
-

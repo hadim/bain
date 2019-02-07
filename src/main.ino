@@ -20,6 +20,12 @@ const int timeOffsetHours = -5;
 // Suggested rate is 1/60Hz (1 m or 60,000 ms)
 const int loop_delay_ms = 1000;
 
+// LEDs. Disable by setting vaue to `-1`.
+int wifi_LED = 11;
+int sensor_LED = 12;
+int mqtt_LED = 13;
+int ntp_LED = -1;
+
 // By default 'pool.ntp.org' is used with 60 seconds
 // update interval and no offset
 WiFiUDP ntpUDP;
@@ -30,16 +36,31 @@ void setup()
   Serial.begin(115200);
   delay(100);
 
+  // Setup LEDs
+  if (wifi_LED != -1) pinMode(wifi_LED, OUTPUT);
+  if (sensor_LED != -1) pinMode(sensor_LED, OUTPUT);
+  if (mqtt_LED != -1) pinMode(mqtt_LED, OUTPUT);
+  if (ntp_LED != -1) pinMode(ntp_LED, OUTPUT);
+
+  // Set LEDs to low.
+  if (wifi_LED != -1) digitalWrite(wifi_LED, LOW);
+  if (sensor_LED != -1) digitalWrite(sensor_LED, LOW);
+  if (mqtt_LED != -1) digitalWrite(mqtt_LED, LOW);
+  if (ntp_LED != -1) digitalWrite(ntp_LED, LOW);
+
   // Connect to WiFi and print some informations
   // about the connection.
   connectWifi(wifi_ssid, wifi_password);
   logWifiInformations();
+  if (wifi_LED != -1) digitalWrite(wifi_LED, HIGH);
 
   // Init BME280 sensor.
   initBME280Sensor();
+  if (sensor_LED != -1) digitalWrite(sensor_LED, HIGH);
 
   // Init MQTT Client.
   initMQTT(mqtt_client_id);
+  if (mqtt_LED != -1) digitalWrite(mqtt_LED, HIGH);
 
   // Init NTP Client.
   timeClient.begin();
@@ -49,6 +70,7 @@ void setup()
 
   // Set time update interval to 6 hours.
   timeClient.setUpdateInterval(6 * 3600);
+  if (ntp_LED != -1) digitalWrite(ntp_LED, HIGH);
 }
 
 void loop()
