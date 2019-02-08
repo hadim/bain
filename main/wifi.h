@@ -6,7 +6,6 @@
 void logIPAddress()
 {
     // Print IP address
-    Serial.println();
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
@@ -34,7 +33,6 @@ void logMACAddress()
 void logSignalStrenght()
 {
     // Print the received signal strength.
-    Serial.println();
     Serial.print("Signal strength (RSSI): ");
     Serial.println(WiFi.RSSI());
 }
@@ -42,11 +40,9 @@ void logSignalStrenght()
 void logEncryption()
 {
     // Print the encryption type:
-    Serial.println();
     Serial.print("Encryption Type: ");
     byte encryption = WiFi.encryptionType(0);
     Serial.println(encryption, HEX);
-    Serial.println();
 }
 
 void logWifiInformations()
@@ -65,14 +61,12 @@ void connectWifi(const char *wifi_ssid, const char *wifi_password)
 
         Serial.print("Connecting to: ");
         Serial.println(wifi_ssid);
-        Serial.println();
 
         while (WiFi.status() != WL_CONNECTED)
         {
             delay(500);
             Serial.print(".");
         }
-
         Serial.println();
         Serial.println("Connected.");
     }

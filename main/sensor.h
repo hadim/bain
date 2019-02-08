@@ -21,12 +21,16 @@ void initBME280Sensor()
 {
     Serial.println("Checking for a valid BME280 sensor.");
 
-    while (!bme.begin())
+    if (!bme.begin())
     {
-        delay(500);
-        Serial.print(".");
+        while (!bme.begin())
+        {
+            delay(500);
+            Serial.print(".");
+        }
+        Serial.println("");
     }
-    Serial.println();
+
     Serial.println("BME280 sensor found.");
 
     // Weather monitoring settings
@@ -45,8 +49,11 @@ void sensorMeasure()
     bme.takeForcedMeasurement(); // Has no effect in normal mode
 }
 
-void logSensorValues()
+void logSensorValues(String timestamp)
 {
+    Serial.print("Date : ");
+    Serial.println(timestamp);
+
     Serial.print("Temperature = ");
     Serial.print(bme.readTemperature());
     Serial.println(" *C");
@@ -69,13 +76,9 @@ String getValuesAsJSONString(String timestamp)
 
     JsonObject &root = jsonBuffer.createObject();
 
-    // root["temperature"] = bme.readTemperature();
-    // root["pressure"] = bme.readPressure() / 100.0F;
-    // root["humidity"] = bme.readHumidity();
-
-    root["temperature"] = 35.44;
-    root["pressure"] = 1023.03;
-    root["humidity"] = 80.73;
+    root["temperature"] = bme.readTemperature();
+    root["pressure"] = bme.readPressure() / 100.0F;
+    root["humidity"] = bme.readHumidity();
 
     const char *timestampChar = timestamp.c_str();
     root["date"] = timestampChar;

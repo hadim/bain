@@ -18,13 +18,10 @@ char *mqtt_message_topic = "bain_sensor/sensor1";
 const int timeOffsetHours = -5;
 
 // Suggested rate is 1/60Hz (1 m or 60,000 ms)
-const int loop_delay_ms = 1000;
+const int loop_delay_ms = 10000;
 
 // LEDs. Disable by setting vaue to `-1`.
-int wifi_LED = -1;
-int sensor_LED = -1;
-int mqtt_LED = -1;
-int ntp_LED = -1;
+int state_LED = -1;
 
 // By default 'pool.ntp.org' is used with 60 seconds
 // update interval and no offset
@@ -33,35 +30,29 @@ NTPClient timeClient(ntpUDP);
 
 void setup()
 {
-  Wire.begin(0, 2);
-  Serial.begin(9600);
+  Serial.begin(115200);
+  while (!Serial);
+
   delay(100);
 
   // Setup LEDs
-  if (wifi_LED != -1) pinMode(wifi_LED, OUTPUT);
-  if (sensor_LED != -1) pinMode(sensor_LED, OUTPUT);
-  if (mqtt_LED != -1) pinMode(mqtt_LED, OUTPUT);
-  if (ntp_LED != -1) pinMode(ntp_LED, OUTPUT);
+  if (state_LED != -1)
+    pinMode(state_LED, OUTPUT);
 
   // Set LEDs to low.
-  if (wifi_LED != -1) digitalWrite(wifi_LED, LOW);
-  if (sensor_LED != -1) digitalWrite(sensor_LED, LOW);
-  if (mqtt_LED != -1) digitalWrite(mqtt_LED, LOW);
-  if (ntp_LED != -1) digitalWrite(ntp_LED, LOW);
+  if (state_LED != -1)
+    digitalWrite(state_LED, LOW);
 
   // Connect to WiFi and print some informations
   // about the connection.
   connectWifi(wifi_ssid, wifi_password);
   logWifiInformations();
-  if (wifi_LED != -1) digitalWrite(wifi_LED, HIGH);
 
   // Init BME280 sensor.
-  //initBME280Sensor();
-  if (sensor_LED != -1) digitalWrite(sensor_LED, HIGH);
+  initBME280Sensor();
 
   // Init MQTT Client.
   initMQTT(mqtt_client_id);
-  if (mqtt_LED != -1) digitalWrite(mqtt_LED, HIGH);
 
   // Init NTP Client.
   timeClient.begin();
@@ -71,9 +62,11 @@ void setup()
 
   // Set time update interval to 6 hours.
   timeClient.setUpdateInterval(6 * 3600);
-  if (ntp_LED != -1) digitalWrite(ntp_LED, HIGH);
 
   Serial.println("Start the controller loop.");
+
+  if (state_LED != -1)
+    digitalWrite(state_LED, HIGH);
 }
 
 void loop()
@@ -85,21 +78,21 @@ void loop()
   connectWifi(wifi_ssid, wifi_password);
 
   // Trigger measure on the sensor.
-  //sensorMeasure();
-
-  // Print sensor values (can be disabled when in production).
-  //logSensorValues();
+  sensorMeasure();
 
   // Get sensor values as JSON string.
   String timestamp = getTimeStampString();
   String message = getValuesAsJSONString(timestamp);
 
+  // Print sensor values (can be disabled when in production).
+  logSensorValues(timestamp);
+
   // Send JSON to MQTT broker.
   sendMessage(message, mqtt_message_topic, mqtt_client_id);
 
   // Delay in ms in between two data acquisition.
-  Serial.print(".");
   delay(loop_delay_ms);
+  //ESP.deepSleep(loop_delay_ms * 1e3);
 }
 
 // https://github.com/arduino-libraries/NTPClient/issues/36
