@@ -18,7 +18,7 @@ char *mqtt_message_topic = "bain_sensor/sensor1";
 const int timeOffsetHours = -5;
 
 // Suggested rate is 1/60Hz (1 m or 60,000 ms)
-const int loop_delay_ms = 10000;
+const int loop_delay_ms = 60000 * 2;
 
 // LEDs. Disable by setting vaue to `-1`.
 int state_LED = -1;
