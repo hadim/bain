@@ -20,7 +20,8 @@ Adafruit_BME280 bme; // I2C
 void initBME280Sensor()
 {
     Serial.println("Checking for a valid BME280 sensor.");
-    while (!bme.begin(&Wire))
+
+    while (!bme.begin())
     {
         delay(500);
         Serial.print(".");
@@ -68,9 +69,13 @@ String getValuesAsJSONString(String timestamp)
 
     JsonObject &root = jsonBuffer.createObject();
 
-    root["temperature"] = bme.readTemperature();
-    root["pressure"] = bme.readPressure() / 100.0F;
-    root["humidty"] = bme.readHumidity();
+    // root["temperature"] = bme.readTemperature();
+    // root["pressure"] = bme.readPressure() / 100.0F;
+    // root["humidity"] = bme.readHumidity();
+
+    root["temperature"] = 35.44;
+    root["pressure"] = 1023.03;
+    root["humidity"] = 80.73;
 
     const char *timestampChar = timestamp.c_str();
     root["date"] = timestampChar;

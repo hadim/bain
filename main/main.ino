@@ -21,9 +21,9 @@ const int timeOffsetHours = -5;
 const int loop_delay_ms = 1000;
 
 // LEDs. Disable by setting vaue to `-1`.
-int wifi_LED = 11;
-int sensor_LED = 12;
-int mqtt_LED = 13;
+int wifi_LED = -1;
+int sensor_LED = -1;
+int mqtt_LED = -1;
 int ntp_LED = -1;
 
 // By default 'pool.ntp.org' is used with 60 seconds
@@ -33,7 +33,8 @@ NTPClient timeClient(ntpUDP);
 
 void setup()
 {
-  Serial.begin(115200);
+  Wire.begin(0, 2);
+  Serial.begin(9600);
   delay(100);
 
   // Setup LEDs
@@ -55,7 +56,7 @@ void setup()
   if (wifi_LED != -1) digitalWrite(wifi_LED, HIGH);
 
   // Init BME280 sensor.
-  initBME280Sensor();
+  //initBME280Sensor();
   if (sensor_LED != -1) digitalWrite(sensor_LED, HIGH);
 
   // Init MQTT Client.
@@ -71,6 +72,8 @@ void setup()
   // Set time update interval to 6 hours.
   timeClient.setUpdateInterval(6 * 3600);
   if (ntp_LED != -1) digitalWrite(ntp_LED, HIGH);
+
+  Serial.println("Start the controller loop.");
 }
 
 void loop()
@@ -82,19 +85,20 @@ void loop()
   connectWifi(wifi_ssid, wifi_password);
 
   // Trigger measure on the sensor.
-  sensorMeasure();
+  //sensorMeasure();
 
   // Print sensor values (can be disabled when in production).
-  logSensorValues();
+  //logSensorValues();
 
   // Get sensor values as JSON string.
   String timestamp = getTimeStampString();
   String message = getValuesAsJSONString(timestamp);
 
   // Send JSON to MQTT broker.
-  sendMessage(message, "bain/sensor1", mqtt_client_id);
+  sendMessage(message, mqtt_message_topic, mqtt_client_id);
 
   // Delay in ms in between two data acquisition.
+  Serial.print(".");
   delay(loop_delay_ms);
 }
 
