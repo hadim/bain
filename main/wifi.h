@@ -64,11 +64,15 @@ void connectWifi(const char *wifi_ssid, const char *wifi_password)
 
         while (WiFi.status() != WL_CONNECTED)
         {
+            if (state_LED != -1)
+                digitalWrite(state_LED, LOW);
             delay(500);
             Serial.print(".");
         }
         Serial.println();
         Serial.println("Connected.");
+        if (state_LED != -1)
+            digitalWrite(state_LED, HIGH);
     }
 }
 

@@ -1,6 +1,7 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
+#include "parmeters.h"
 #include "secret.h"
 #include "wifi.h"
 #include "sensor.h"
@@ -10,18 +11,8 @@
 const char *wifi_ssid = WIFI_SSID;
 const char *wifi_password = WIFI_PASSWORD;
 
-// MQTT
-char *mqtt_client_id = "sensor1";
-char *mqtt_message_topic = "bain_sensor/sensor1";
-
-// Timezone
-const int timeOffsetHours = -5;
-
 // Suggested rate is 1/60Hz (1 m or 60,000 ms)
-const int loop_delay_ms = 60000 * 2;
-
-// LEDs. Disable by setting vaue to `-1`.
-int state_LED = -1;
+const int loop_delay_ms = loop_delay_s * 1000;
 
 // By default 'pool.ntp.org' is used with 60 seconds
 // update interval and no offset
@@ -41,7 +32,7 @@ void setup()
 
   // Set LEDs to low.
   if (state_LED != -1)
-    digitalWrite(state_LED, LOW);
+    digitalWrite(state_LED, HIGH);
 
   // Connect to WiFi and print some informations
   // about the connection.

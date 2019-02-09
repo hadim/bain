@@ -25,6 +25,8 @@ void initBME280Sensor()
     {
         while (!bme.begin())
         {
+            if (state_LED != -1)
+                digitalWrite(state_LED, LOW);
             delay(500);
             Serial.print(".");
         }
@@ -32,6 +34,8 @@ void initBME280Sensor()
     }
 
     Serial.println("BME280 sensor found.");
+    if (state_LED != -1)
+        digitalWrite(state_LED, HIGH);
 
     // Weather monitoring settings
     Serial.println("Forced mode, 1x temperature / 1x humidity / 1x pressure oversampling,");

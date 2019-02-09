@@ -61,6 +61,9 @@ void connect(char *mqtt_client_id)
 
 void initMQTT(char *mqtt_client_id)
 {
+    if (state_LED != -1)
+        digitalWrite(state_LED, LOW);
+
     // Init the client.
     client.setServer(mqtt_server, mqtt_port);
 
@@ -70,6 +73,9 @@ void initMQTT(char *mqtt_client_id)
 
     // Connect to the broker.
     connect(mqtt_client_id);
+
+    if (state_LED != -1)
+        digitalWrite(state_LED, HIGH);
 }
 
 void sendMessage(String message, char *topic, char *mqtt_client_id)
