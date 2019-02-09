@@ -1,7 +1,7 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-#include "parmeters.h"
+#include "parameters.h"
 #include "secret.h"
 #include "wifi.h"
 #include "sensor.h"
