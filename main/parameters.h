@@ -2,8 +2,8 @@
 #define PARAMETERS_SECRET
 
 // MQTT
-char *mqtt_client_id = "sensor2";
-char *mqtt_message_topic = "bain_sensor/sensor2";
+char *mqtt_client_id = "sensor1";
+char *mqtt_message_topic = "bain_sensor/sensor1";
 
 // LEDs. Disable by setting vaue to `-1`.
 int state_LED = -1;
