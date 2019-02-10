@@ -2,11 +2,11 @@
 #define PARAMETERS_SECRET
 
 // MQTT
-char *mqtt_client_id = "sensor1";
-char *mqtt_message_topic = "bain_sensor/sensor1";
+char *mqtt_client_id = "sensor2";
+char *mqtt_message_topic = "bain_sensor/sensor2";
 
 // LEDs. Disable by setting vaue to `-1`.
-int state_LED = 0;
+int state_LED = -1;
 
 // Timezone
 const int timeOffsetHours = -5;
