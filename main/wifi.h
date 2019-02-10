@@ -6,8 +6,7 @@
 void logIPAddress()
 {
     // Print IP address
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
+    Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
 }
 
@@ -48,9 +47,9 @@ void logEncryption()
 void logWifiInformations()
 {
     logIPAddress();
-    logMACAddress();
+    //logMACAddress();
     logSignalStrenght();
-    logEncryption();
+    //logEncryption();
 }
 
 void connectWifi(const char *wifi_ssid, const char *wifi_password)
@@ -64,15 +63,11 @@ void connectWifi(const char *wifi_ssid, const char *wifi_password)
 
         while (WiFi.status() != WL_CONNECTED)
         {
-            if (state_LED != -1)
-                digitalWrite(state_LED, LOW);
             delay(500);
             Serial.print(".");
         }
         Serial.println();
         Serial.println("Connected.");
-        if (state_LED != -1)
-            digitalWrite(state_LED, HIGH);
     }
 }
 

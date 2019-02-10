@@ -39,10 +39,12 @@ You also need to install the following Arduino libraries (use the **Arduino Libr
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson): a JSON library. **Warning**: as of today (06/02/2019), you should install version 5 only and not version 6.
 - [NTPClient](https://github.com/arduino-libraries/NTPClient): an NTP client library to get date and time.
 
-Set WiFi parameters:
+Set secret parameters:
 
 - Copy `src/secret.h.template` to `src/secret.h`.
 - Edit `src/secret.h` to set WiFi and MQTT parameters.
+
+Set also common parameters in `src/parameters.h`.
 
 Now you're ready to flash your ESP8266 controller.
 

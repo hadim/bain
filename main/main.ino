@@ -24,16 +24,6 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  delay(100);
-
-  // Setup LEDs
-  if (state_LED != -1)
-    pinMode(state_LED, OUTPUT);
-
-  // Set LEDs to low.
-  if (state_LED != -1)
-    digitalWrite(state_LED, HIGH);
-
   // Connect to WiFi and print some informations
   // about the connection.
   connectWifi(wifi_ssid, wifi_password);
@@ -43,7 +33,7 @@ void setup()
   initBME280Sensor();
 
   // Init MQTT Client.
-  initMQTT(mqtt_client_id);
+  initMQTT();
 
   // Init NTP Client.
   timeClient.begin();
@@ -56,11 +46,23 @@ void setup()
 
   Serial.println("Start the controller loop.");
 
-  if (state_LED != -1)
-    digitalWrite(state_LED, HIGH);
+  if (deep_sleep == true)
+  {
+    one_step();
+    ESP.deepSleep(loop_delay_ms * 1e3);
+  }
 }
 
 void loop()
+{
+  if (deep_sleep == false)
+  {
+    one_step();
+    delay(loop_delay_ms);
+  }
+}
+
+void one_step()
 {
   // Update time if needed.
   timeClient.update();
@@ -76,20 +78,10 @@ void loop()
   String message = getValuesAsJSONString(timestamp);
 
   // Print sensor values (can be disabled when in production).
-  logSensorValues(timestamp);
+  // logSensorValues(timestamp);
 
   // Send JSON to MQTT broker.
-  sendMessage(message, mqtt_message_topic, mqtt_client_id);
-
-  // Delay in ms in between two data acquisition.
-  if(deep_sleep == true)
-  {
-    ESP.deepSleep(loop_delay_ms * 1e3);
-  }
-  else
-  {
-    delay(loop_delay_ms);
-  }
+  sendMessage(message, true);
 }
 
 // https://github.com/arduino-libraries/NTPClient/issues/36

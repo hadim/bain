@@ -25,8 +25,6 @@ void initBME280Sensor()
     {
         while (!bme.begin())
         {
-            if (state_LED != -1)
-                digitalWrite(state_LED, LOW);
             delay(500);
             Serial.print(".");
         }
@@ -34,12 +32,10 @@ void initBME280Sensor()
     }
 
     Serial.println("BME280 sensor found.");
-    if (state_LED != -1)
-        digitalWrite(state_LED, HIGH);
 
     // Weather monitoring settings
-    Serial.println("Forced mode, 1x temperature / 1x humidity / 1x pressure oversampling,");
-    Serial.println("filter off");
+    //Serial.println("Forced mode, 1x temperature / 1x humidity / 1x pressure oversampling,");
+    //Serial.println("filter off");
     bme.setSampling(Adafruit_BME280::MODE_FORCED,
                     Adafruit_BME280::SAMPLING_X1, // temperature
                     Adafruit_BME280::SAMPLING_X1, // pressure
@@ -55,9 +51,6 @@ void sensorMeasure()
 
 void logSensorValues(String timestamp)
 {
-    // Try to avoid NaN values
-    bme.begin();
-
     Serial.print("Date : ");
     Serial.println(timestamp);
 
@@ -82,9 +75,6 @@ String getValuesAsJSONString(String timestamp)
     DynamicJsonBuffer jsonBuffer(capacity);
 
     JsonObject &root = jsonBuffer.createObject();
-
-    // Try to avoid NaN values
-    bme.begin();
 
     root["temperature"] = bme.readTemperature();
     root["pressure"] = bme.readPressure() / 100.0F;
