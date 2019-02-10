@@ -20,7 +20,9 @@ Features:
 
 ### Assembly on a breadboard
 
-We will first connect both boards together using a breadboard in order to check that the flash procedure works well.
+Follow the connections shown below. There is 4 connections (blue, red, yellow and green) in between the Feather ESP8266 board the BME280 chip. And also a last connection in purple to enable deep sleep mode and reduce battery consumption. **Warning:** Apparently, the Feather ESP8266 chip can't be flashed with the purple connection so you have to disconnect it, then flash and then reconnect it.
+
+![Feather ESP8266](fritzing/drawing.png)
 
 ### Flash the controller
 
@@ -44,7 +46,7 @@ Set secret parameters:
 - Copy `src/secret.h.template` to `src/secret.h`.
 - Edit `src/secret.h` to set WiFi and MQTT parameters.
 
-Set also common parameters in `src/parameters.h`.
+Set also common parameters in `src/parameters.h`. Here you can for example disable or enable deep sleep mode.
 
 Now you're ready to flash your ESP8266 controller.
 
@@ -52,7 +54,7 @@ Now you're ready to flash your ESP8266 controller.
 - Compile it.
 - After connecting the ESP8266 board to your computer, upload the controller.
 
-The sensor values are sent as a JSON string:
+By reading on the serial port, you should some log and also the JSON string sent to the MQTT broker:
 
 ```json
 {
@@ -65,9 +67,7 @@ The sensor values are sent as a JSON string:
 
 ### Final Assembly
 
-Once you've checked that everything works you can solder both boards and insert them in a fancy 3D printed custom case.
-
-TODO
+Once you've checked that everything works you can assemble both chips with a [FeatherWing proto board](https://www.adafruit.com/product/2884).
 
 ## Home Assistant
 
@@ -76,22 +76,22 @@ If you are using [Home Assistant](https://www.home-assistant.io) to retrieve the
 ```yaml
 sensor:
   - platform: mqtt
-    name: 'Temperature 1'
-    state_topic: 'bain_sensor/sensor1'
+    name: bain_sensor1_temperature
+    state_topic: "bain_sensor_1"
     unit_of_measurement: '°C'
-    value_template: '{{ value_json.temperature }}'
+    value_template: "{{ value_json.temperature }}"
 
   - platform: mqtt
-    name: 'Humidity 1'
-    state_topic: 'bain_sensor/sensor1'
+    name: bain_sensor1_humidity
+    state_topic: "bain_sensor_1"
     unit_of_measurement: '%'
-    value_template: '{{ value_json.humidity }}'
+    value_template: "{{ value_json.humidity }}"
 
   - platform: mqtt
-    name: 'Pressure 1'
-    state_topic: 'bain_sensor/sensor1'
+    name: bain_sensor1_pressure
+    state_topic: "bain_sensor_1"
     unit_of_measurement: 'hPa'
-    value_template: '{{ value_json.pressure }}'
+    value_template: "{{ value_json.pressure }}"
 ```
 
 ## License
