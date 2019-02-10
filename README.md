@@ -13,7 +13,7 @@ Features:
 - Generated data are sent to a custom MQTT broker as a JSON string.
 - Time is syncronized every 6h with NTP and the timezone can be set.
 - A timestamp string is added to sensor data before they are sent.
-- Four LEDs can indicate current controller state (WiFi, sensor, MQTT, NTP).
+- Deep sleep mode can be enabled to reduce power consumption. A standard battery of [1200 mAh](https://www.adafruit.com/product/258) can last few weeks/months (**Warning:** This still needs to be verified).
 - The source code is profusely commented and factorized. It should be easily to adapt to your needs.
 
 ## Instructions
