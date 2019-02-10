@@ -82,8 +82,14 @@ void loop()
   sendMessage(message, mqtt_message_topic, mqtt_client_id);
 
   // Delay in ms in between two data acquisition.
-  delay(loop_delay_ms);
-  //ESP.deepSleep(loop_delay_ms * 1e3);
+  if(deep_sleep == true)
+  {
+    ESP.deepSleep(loop_delay_ms * 1e3);
+  }
+  else
+  {
+    delay(loop_delay_ms);
+  }
 }
 
 // https://github.com/arduino-libraries/NTPClient/issues/36
