@@ -7,6 +7,9 @@
 #include "sensor.h"
 #include "mqtt.h"
 
+// Pin to read voltage.
+#define VBATPIN A0
+
 // WiFi
 const char *wifi_ssid = WIFI_SSID;
 const char *wifi_password = WIFI_PASSWORD;
@@ -74,13 +77,25 @@ void one_step()
 
   // Get sensor values as JSON string.
   String timestamp = getTimeStampString();
-  String message = getValuesAsJSONString(timestamp);
+  String message = getValuesAsJSONString(timestamp, getBatteryVoltage());
 
   // Print sensor values (can be disabled when in production).
   // logSensorValues(timestamp);
 
   // Send JSON to MQTT broker.
   sendMessage(message, true);
+}
+
+float getBatteryVoltage()
+{
+
+  float measuredvbat = analogRead(VBATPIN);
+
+  measuredvbat *= 2;    // we divided by 2, so multiply back
+  measuredvbat *= 3.3;  // Multiply by 3.3V, our reference voltage
+  measuredvbat /= 1024; // convert to voltage
+
+  return measuredvbat;
 }
 
 // https://github.com/arduino-libraries/NTPClient/issues/36

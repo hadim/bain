@@ -14,6 +14,7 @@ Features:
 - Time is syncronized every 6h with NTP and the timezone can be set.
 - A timestamp string is added to sensor data before they are sent.
 - Deep sleep mode can be enabled to reduce power consumption. A standard battery of [1200 mAh](https://www.adafruit.com/product/258) can last few weeks/months (**Warning:** This still needs to be verified).
+- Voltage of the sensor is sent to the MQTT broker to monitor battery level.
 - The source code is profusely commented and factorized. It should be easily to adapt to your needs.
 
 ## Instructions
@@ -61,7 +62,8 @@ By reading on the serial port, you should some log and also the JSON string sent
   "temperature": 25.23,
   "pressure": 1018.4,
   "humidty": 90.12,
-  "timestamp": "2019-02-15 15:45:23"
+  "timestamp": "2019-02-15 15:45:23",
+  "voltage": 2.16
 }
 ```
 
