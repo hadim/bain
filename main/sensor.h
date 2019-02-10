@@ -55,6 +55,9 @@ void sensorMeasure()
 
 void logSensorValues(String timestamp)
 {
+    // Try to avoid NaN values
+    bme.begin();
+
     Serial.print("Date : ");
     Serial.println(timestamp);
 
@@ -79,6 +82,9 @@ String getValuesAsJSONString(String timestamp)
     DynamicJsonBuffer jsonBuffer(capacity);
 
     JsonObject &root = jsonBuffer.createObject();
+
+    // Try to avoid NaN values
+    bme.begin();
 
     root["temperature"] = bme.readTemperature();
     root["pressure"] = bme.readPressure() / 100.0F;
