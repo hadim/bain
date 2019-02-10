@@ -14,8 +14,7 @@ const char *wifi_password = WIFI_PASSWORD;
 // Suggested rate is 1/60Hz (1 m or 60,000 ms)
 const int loop_delay_ms = loop_delay_s * 1000;
 
-// By default 'pool.ntp.org' is used with 60 seconds
-// update interval and no offset
+// Init NTP client
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
 
