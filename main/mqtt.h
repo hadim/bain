@@ -29,6 +29,8 @@ void callback(char *topic, byte *payload, unsigned int length)
 
 void connect()
 {
+    client.setServer(mqtt_server, mqtt_port);
+
     // Loop until we're reconnected
     while (!client.connected())
     {
@@ -59,16 +61,8 @@ void connect()
             delay(2000);
         }
     }
-}
 
-void initMQTT()
-{
-    // Init the client.
-    client.setServer(mqtt_server, mqtt_port);
-
-    // Set a callback when a message is received.
-    // Disable it since we don't need it here.
-    // client.setCallback(callback);
+    espClient.setSync(true);
 }
 
 void sendMessage(String message, boolean printValues)
@@ -79,14 +73,34 @@ void sendMessage(String message, boolean printValues)
     }
 
     const char *msg = message.c_str();
-    client.publish(mqtt_message_topic, msg);
-    delay(100);
+
+    int messageSentCode;
+    const int maximum_try = 10;
+    int i = 0;
+
+    messageSentCode = client.publish(mqtt_message_topic, msg);
     client.flush();
+
+    while ((messageSentCode != 0) && (i <= maximum_try))
+    {
+        Serial.println("[MQTT] - Sending message failed. Trying again");
+        Serial.print("[MQTT] - Returned code: ");
+        Serial.println(messageSentCode);
+        delay(2000);
+
+        messageSentCode = client.publish(mqtt_message_topic, msg);
+        client.flush();
+    }
 
     if (printValues == true)
     {
         Serial.println(msg);
     }
+}
+
+void disconnectMQTT()
+{
+    client.disconnect();
 }
 
 #endif

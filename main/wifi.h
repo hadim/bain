@@ -71,4 +71,9 @@ void connectWifi(const char *wifi_ssid, const char *wifi_password)
     }
 }
 
+void disconnectWifi()
+{
+    WiFi.disconnect();
+}
+
 #endif

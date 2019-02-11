@@ -1,11 +1,9 @@
-#include <NTPClient.h>
-#include <WiFiUdp.h>
-
 #include "parameters.h"
 #include "secret.h"
 #include "wifi.h"
 #include "sensor.h"
 #include "mqtt.h"
+#include "ntp.h"
 
 // Pin to read voltage.
 #define VBATPIN A0
@@ -16,10 +14,6 @@ const char *wifi_password = WIFI_PASSWORD;
 
 // Suggested rate is 1/60Hz (1 m or 60,000 ms)
 const int loop_delay_ms = loop_delay_s * 1000;
-
-// Init NTP client
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP);
 
 void setup()
 {
@@ -34,23 +28,14 @@ void setup()
   // Init BME280 sensor.
   initBME280Sensor();
 
-  // Init MQTT Client.
-  initMQTT();
-
-  // Init NTP Client.
-  timeClient.begin();
-
-  // Set the timezone.
-  timeClient.setTimeOffset(timeOffsetHours * 3600);
-
-  // Set time update interval to 6 hours.
-  timeClient.setUpdateInterval(6 * 3600);
-
-  Serial.println("Start the controller loop.");
+  // Init NTP
+  initNTP();
 
   if (deep_sleep == true)
   {
     one_step();
+    disconnectMQTT();
+    disconnectWifi();
     ESP.deepSleep(loop_delay_ms * 1e3);
   }
 }
@@ -67,7 +52,7 @@ void loop()
 void one_step()
 {
   // Update time if needed.
-  timeClient.update();
+  updateNTP();
 
   // Check in case WiFi has been disconnected.
   connectWifi(wifi_ssid, wifi_password);
@@ -78,9 +63,6 @@ void one_step()
   // Get sensor values as JSON string.
   String timestamp = getTimeStampString();
   String message = getValuesAsJSONString(timestamp, getBatteryVoltage());
-
-  // Print sensor values (can be disabled when in production).
-  // logSensorValues(timestamp);
 
   // Send JSON to MQTT broker.
   sendMessage(message, true);
@@ -96,33 +78,4 @@ float getBatteryVoltage()
   measuredvbat /= 1024; // convert to voltage
 
   return measuredvbat;
-}
-
-// https://github.com/arduino-libraries/NTPClient/issues/36
-String getTimeStampString()
-{
-  time_t rawtime = timeClient.getEpochTime();
-  struct tm *ti;
-  ti = localtime(&rawtime);
-
-  uint16_t year = ti->tm_year + 1900;
-  String yearStr = String(year);
-
-  uint8_t month = ti->tm_mon + 1;
-  String monthStr = month < 10 ? "0" + String(month) : String(month);
-
-  uint8_t day = ti->tm_mday;
-  String dayStr = day < 10 ? "0" + String(day) : String(day);
-
-  uint8_t hours = ti->tm_hour;
-  String hoursStr = hours < 10 ? "0" + String(hours) : String(hours);
-
-  uint8_t minutes = ti->tm_min;
-  String minuteStr = minutes < 10 ? "0" + String(minutes) : String(minutes);
-
-  uint8_t seconds = ti->tm_sec;
-  String secondStr = seconds < 10 ? "0" + String(seconds) : String(seconds);
-
-  return yearStr + "-" + monthStr + "-" + dayStr + " " +
-         hoursStr + ":" + minuteStr + ":" + secondStr;
 }
