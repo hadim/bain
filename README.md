@@ -79,19 +79,19 @@ If you are using [Home Assistant](https://www.home-assistant.io) to retrieve the
 sensor:
   - platform: mqtt
     name: bain_sensor1_temperature
-    state_topic: "bain_sensor_1"
+    state_topic: "/bain_sensor/1"
     unit_of_measurement: '°C'
     value_template: "{{ value_json.temperature }}"
 
   - platform: mqtt
     name: bain_sensor1_humidity
-    state_topic: "bain_sensor_1"
+    state_topic: "/bain_sensor/1"
     unit_of_measurement: '%'
     value_template: "{{ value_json.humidity }}"
 
   - platform: mqtt
     name: bain_sensor1_pressure
-    state_topic: "bain_sensor_1"
+    state_topic: "/bain_sensor/1"
     unit_of_measurement: 'hPa'
     value_template: "{{ value_json.pressure }}"
 ```
