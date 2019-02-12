@@ -20,6 +20,9 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
+  // Clean console.
+  Serial.println("");
+
   // Connect to WiFi and print some informations
   // about the connection.
   connectWifi(wifi_ssid, wifi_password);

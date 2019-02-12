@@ -1,7 +1,8 @@
 #ifndef BAIN_MQTT
 #define BAIN_MQTT
 
-#include <PubSubClient.h>
+#define MQTT_MAX_PACKET_SIZE 2048
+#include "PubSubClient.h"
 
 #include "secret.h"
 
@@ -15,22 +16,28 @@ const char *mqtt_message_topic = MQTT_MESSAGE_TOPIC;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-void connect()
+boolean connectMQTT()
 {
-    client.setServer(mqtt_server, mqtt_port);
+    if (!client.connected())
+    {
+        client.setServer(mqtt_server, mqtt_port);
+    }
 
     // MQTT Client parameters
     const char *willTopic = 0;
-    const uint8_t willQos = 1;
-    const boolean willRetain = true;
+    const uint8_t willQos = 0;
+    const boolean willRetain = false;
     const char *willMessage = 0;
     const boolean cleanSession = true;
 
+    const int maximum_try = 10;
+    int i = 0;
+    boolean isConnected = false;
+
     // Loop until we're reconnected
-    while (!client.connected())
+    while (!client.connected() && (i <= maximum_try))
     {
         // Attempt to connect
-        boolean isConnected;
         if (strlen(mqtt_username) == 0 || strlen(mqtt_password) == 0)
         {
             isConnected = client.connect(mqtt_client_id, NULL, NULL, willTopic, willQos, willRetain, willMessage, cleanSession);
@@ -40,11 +47,7 @@ void connect()
             isConnected = client.connect(mqtt_client_id, mqtt_username, mqtt_password, willTopic, willQos, willRetain, willMessage, cleanSession);
         }
 
-        if (isConnected)
-        {
-            Serial.println("[MQTT] - Client connected.");
-        }
-        else
+        if (!isConnected)
         {
             Serial.print("[MQTT] - Failed, rc=");
             Serial.print(client.state());
@@ -53,49 +56,73 @@ void connect()
             // Wait 2 seconds before retrying
             delay(2000);
         }
+        i++;
     }
 
-    espClient.setSync(true);
+    if (isConnected)
+    {
+        Serial.println("[MQTT] - Client connected.");
+        return true;
+    }
+    else
+    {
+        Serial.println("[MQTT] - Client connection failed.");
+        return false;
+    }
 }
 
-void sendMessage(String message, boolean printValues)
+boolean sendMessage(String message, boolean printValues)
 {
-    if (!client.connected())
+    boolean isConnected = client.connected();
+    if (!isConnected)
     {
-        connect();
+        isConnected = connectMQTT();
     }
 
     const char *msg = message.c_str();
 
-    int messageSentCode;
+    if (!isConnected)
+    {
+        Serial.println("[MQTT] - Message not sent.");
+        Serial.println(msg);
+        return false;
+    }
+
+    boolean messageSent;
     const int maximum_try = 10;
     int i = 0;
     const boolean retain = true;
 
-    messageSentCode = client.publish(mqtt_message_topic, msg, retain);
-    client.flush();
-    delay(500);
+    messageSent = client.publish(mqtt_message_topic, msg, retain);
 
-    while ((messageSentCode != 1) && (i <= maximum_try))
+    while (!messageSent && (i <= maximum_try))
     {
         Serial.println("[MQTT] - Sending message failed. Trying again");
-        Serial.print("[MQTT] - Returned code: ");
-        Serial.println(messageSentCode);
         delay(2000);
 
-        messageSentCode = client.publish(mqtt_message_topic, msg, retain);
-        client.flush();
+        connectMQTT();
+        messageSent = client.publish(mqtt_message_topic, msg, retain);
         i++;
     }
 
-    Serial.println(messageSentCode);
+    client.flush();
+    delay(100);
 
-    if (printValues == true)
+    if (messageSent && (printValues == true))
     {
         Serial.print("[MQTT] - Message sent to topic: ");
         Serial.println(mqtt_message_topic);
         Serial.println(msg);
+        return true;
     }
+
+    if (!messageSent)
+    {
+        Serial.println("[MQTT] - Message not sent.");
+        Serial.println(msg);
+    }
+
+    return false;
 }
 
 void disconnectMQTT()

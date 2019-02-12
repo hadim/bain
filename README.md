@@ -38,7 +38,7 @@ You also need to install the following Arduino libraries (use the **Arduino Libr
 - [Adafruit ESP8266](https://github.com/adafruit/Adafruit_ESP8266): Arduino board with WiFi capability.
 - [Adafruit BME280 Library](https://github.com/adafruit/Adafruit_BME280_Library): Sensor library.
 - [Adafruit Unified Sensor](https://github.com/adafruit/Adafruit_Sensor): Needed for Adafruit BME280 Library.
-- [PubSubClient](https://github.com/knolleary/pubsubclient): MQTT Client.
+- [PubSubClient](https://github.com/knolleary/pubsubclient): MQTT Client. This library has been integrated into the source code since the `MQTT_MAX_PACKET_SIZE` variable must be increased to `512` ([commit used](https://github.com/knolleary/pubsubclient/tree/26ce89fa476da85399b736f885274d67676dacb8)).
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson): a JSON library. **Warning**: as of today (06/02/2019), you should install version 5 only and not version 6.
 - [NTPClient](https://github.com/arduino-libraries/NTPClient): an NTP client library to get date and time.
 

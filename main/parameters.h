@@ -9,7 +9,7 @@ const int state_LED = -1;
 const int timeOffsetHours = -5;
 
 // Delay between two measures in seconds.
-const int loop_delay_s = 60 * 5;
+const int loop_delay_s = 5 * 60;
 
 // Enable deep sleep
 const boolean deep_sleep = true;

@@ -19,7 +19,7 @@ Adafruit_BME280 bme; // I2C
 
 void initBME280Sensor()
 {
-    Serial.println("Checking for a valid BME280 sensor.");
+    Serial.println("[BME280] - Checking for a sensor.");
 
     if (!bme.begin())
     {
@@ -31,11 +31,9 @@ void initBME280Sensor()
         Serial.println("");
     }
 
-    Serial.println("BME280 sensor found.");
+    Serial.println("[BME280] - Sensor found.");
 
     // Weather monitoring settings
-    //Serial.println("Forced mode, 1x temperature / 1x humidity / 1x pressure oversampling,");
-    //Serial.println("filter off");
     bme.setSampling(Adafruit_BME280::MODE_FORCED,
                     Adafruit_BME280::SAMPLING_X1, // temperature
                     Adafruit_BME280::SAMPLING_X1, // pressure
@@ -51,18 +49,18 @@ void sensorMeasure()
 
 void logSensorValues(String timestamp)
 {
-    Serial.print("Date : ");
+    Serial.print("[BME280] - Date : ");
     Serial.println(timestamp);
 
-    Serial.print("Temperature = ");
+    Serial.print("[BME280] - Temperature = ");
     Serial.print(bme.readTemperature());
     Serial.println(" *C");
 
-    Serial.print("Pressure = ");
+    Serial.print("[BME280] - Pressure = ");
     Serial.print(bme.readPressure() / 100.0F);
     Serial.println(" hPa");
 
-    Serial.print("Humidity = ");
+    Serial.print("[BME280] - Humidity = ");
     Serial.print(bme.readHumidity());
     Serial.println(" %");
 
