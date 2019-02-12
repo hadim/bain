@@ -1,5 +1,5 @@
-#ifndef PARAMETERS_SECRET
-#define PARAMETERS_SECRET
+#ifndef BAIN_PARAMETERS
+#define BAIN_PARAMETERS
 
 // LEDs. Disable by setting vaue to `-1`.
 // Warning: Unused at the moment.
