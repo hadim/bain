@@ -77,7 +77,7 @@ Once you've checked that everything works you can assemble everything together u
 
 **NOTE: Work In Progress.**
 
-If you want to monitor the LiPo battery level, you need to add some connections to your circuit as below. For this you need the follozing:
+If you want to monitor the LiPo battery level, you need to add some connections to your circuit as below. For this you need the following parts:
 
 - 1 x 10kΩ resistor
 - 1 x 48kΩ resistor
