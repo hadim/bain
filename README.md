@@ -77,13 +77,18 @@ Once you've checked that everything works you can assemble everything together u
 
 **NOTE: Work In Progress.**
 
-If you want to monitor the LiPo battery level, you need to add some connections to your circuit as below.
+If you want to monitor the LiPo battery level, you need to add some connections to your circuit as below. For this you need the follozing:
 
-TODO
+- 1 x 10kΩ resistor
+- 1 x 48kΩ resistor
+- 1 x 1MΩ resistor
+- 1 x 1µF capacitor
+
+TODO: add drawing.
 
 Then you need to set `monitorBattery` to `true` in `parameters.h`. You can also read a LiPo battery level from any Huzzah ESP8266 board by flashing `utils/battery/battery.ino`.
 
-This setup comes from https://github.com/lobeck/adafruit-feather-huzzah-8266-battery-monitor.
+*This setup comes from https://github.com/lobeck/adafruit-feather-huzzah-8266-battery-monitor.*
 
 ## Home Assistant
 
