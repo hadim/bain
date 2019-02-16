@@ -14,7 +14,7 @@ Features:
 - Time is syncronized every 6h with NTP and the timezone can be set.
 - A timestamp string is added to sensor data before they are sent.
 - Deep sleep mode can be enabled to reduce power consumption. A standard battery of [1200 mAh](https://www.adafruit.com/product/258) can last few weeks/months (**Warning:** This still needs to be verified).
-- mMonitor battery level (optional).
+- Monitor battery level (optional).
 - The source code is profusely commented and factorized. It should be easily to adapt to your needs.
 
 ## Instructions
@@ -38,9 +38,9 @@ You also need to install the following Arduino libraries (use the **Arduino Libr
 - [Adafruit ESP8266](https://github.com/adafruit/Adafruit_ESP8266): Arduino board with WiFi capability.
 - [Adafruit BME280 Library](https://github.com/adafruit/Adafruit_BME280_Library): Sensor library.
 - [Adafruit Unified Sensor](https://github.com/adafruit/Adafruit_Sensor): Needed for Adafruit BME280 Library.
-- [PubSubClient](https://github.com/knolleary/pubsubclient): MQTT Client. This library has been integrated into the source code since the `MQTT_MAX_PACKET_SIZE` variable must be increased to `512` ([commit used](https://github.com/knolleary/pubsubclient/tree/26ce89fa476da85399b736f885274d67676dacb8)).
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson): a JSON library. **Warning**: as of today (06/02/2019), you should install version 5 only and not version 6.
 - [NTPClient](https://github.com/arduino-libraries/NTPClient): an NTP client library to get date and time.
+- [PubSubClient](https://github.com/knolleary/pubsubclient): MQTT Client. This library has been integrated into the source code since the `MQTT_MAX_PACKET_SIZE` variable must be increased to `512` ([commit used](https://github.com/knolleary/pubsubclient/tree/26ce89fa476da85399b736f885274d67676dacb8)).
 
 Set secret parameters:
 
@@ -73,7 +73,7 @@ By reading on the serial port, you should see some log and also the JSON string 
 
 Once you've checked that everything works you can assemble everything together using a [FeatherWing proto board](https://www.adafruit.com/product/2884).
 
-## Battery Level Monitoring
+### Battery Level Monitoring
 
 **NOTE: Work In Progress.**
 
