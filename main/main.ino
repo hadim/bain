@@ -4,9 +4,9 @@
 #include "sensor.h"
 #include "mqtt.h"
 #include "ntp.h"
+#include "battery.h"
 
-// Pin to read voltage.
-#define VBATPIN A0
+#include <ArduinoJson.h>
 
 // WiFi
 const char *wifi_ssid = WIFI_SSID;
@@ -18,7 +18,8 @@ const int loop_delay_ms = loop_delay_s * 1000;
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial)
+    ;
 
   // Clean console.
   Serial.println("");
@@ -60,25 +61,54 @@ void one_step()
   // Check in case WiFi has been disconnected.
   connectWifi(wifi_ssid, wifi_password);
 
-  // Trigger measure on the sensor.
-  sensorMeasure();
-
-  // Get sensor values as JSON string.
+  // Get a timestamp.
   String timestamp = getTimeStampString();
-  String message = getValuesAsJSONString(timestamp, getBatteryVoltage());
+
+  // Measure battery level
+  BatteryLevel batteryLevel;
+  if (monitorBattery)
+  {
+    batteryLevel = measureBatteryLevel();
+  }
+
+  // Get sensor values.
+  SensorValues sensorValues = getSensorValues();
+
+  // Convert values to JSON string.
+  String message = packToJSON(timestamp, sensorValues, batteryLevel);
 
   // Send JSON to MQTT broker.
   sendMessage(message, true);
 }
 
-float getBatteryVoltage()
+String packToJSON(String timestamp, SensorValues sensorValues, BatteryLevel batteryLevel)
 {
+  // Create JSON object.
+  const size_t capacity = JSON_OBJECT_SIZE(7) + 90;
+  DynamicJsonBuffer jsonBuffer(capacity);
+  JsonObject &root = jsonBuffer.createObject();
 
-  float measuredvbat = analogRead(VBATPIN);
+  root["temperature"] = sensorValues.temperature;
+  root["pressure"] = sensorValues.pressure;
+  root["humidity"] = sensorValues.humidity;
 
-  measuredvbat *= 2;    // we divided by 2, so multiply back
-  measuredvbat *= 3.3;  // Multiply by 3.3V, our reference voltage
-  measuredvbat /= 1024; // convert to voltage
+  if (batteryLevel._valid)
+  {
+    root["batteryLevel"] = batteryLevel.level;
+    root["batteryCharging"] = batteryLevel.isCharging;
+    root["batteryVoltage"] = batteryLevel.realVoltage;
+  }
+  else
+  {
+    root["batteryLevel"] = "";
+    root["batteryCharging"] = "";
+    root["batteryVoltage"] = "";
+  }
 
-  return measuredvbat;
+  const char *timestampChar = timestamp.c_str();
+  root["timestamp"] = timestampChar;
+
+  String message = "";
+  root.printTo(message);
+  return message;
 }

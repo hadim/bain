@@ -5,7 +5,8 @@
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <ArduinoJson.h>
+
+#include "battery.h"
 
 #define BME_SCK 13
 #define BME_MISO 12
@@ -16,6 +17,13 @@
 Adafruit_BME280 bme; // I2C
 //Adafruit_BME280 bme(BME_CS); // hardware SPI
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
+
+struct SensorValues
+{
+    float temperature;
+    float pressure;
+    float humidity;
+};
 
 void initBME280Sensor()
 {
@@ -41,12 +49,6 @@ void initBME280Sensor()
                     Adafruit_BME280::FILTER_OFF);
 }
 
-void sensorMeasure()
-{
-    // Only needed in forced mode! In normal mode, you can remove the next line.
-    bme.takeForcedMeasurement(); // Has no effect in normal mode
-}
-
 void logSensorValues(String timestamp)
 {
     Serial.print("[BME280] - Date : ");
@@ -67,24 +69,23 @@ void logSensorValues(String timestamp)
     Serial.println();
 }
 
-String getValuesAsJSONString(String timestamp, float voltage)
+SensorValues getSensorValues()
 {
-    const size_t capacity = JSON_OBJECT_SIZE(4) + 90;
-    DynamicJsonBuffer jsonBuffer(capacity);
+    // Only needed in forced mode!
+    // In normal mode, you can remove the next line.
+    // Has no effect in normal mode
+    bme.takeForcedMeasurement();
 
-    JsonObject &root = jsonBuffer.createObject();
+    // Read values twice to avoid NaN;
+    bme.readTemperature();
+    bme.readPressure();
+    bme.readHumidity();
 
-    root["temperature"] = bme.readTemperature();
-    root["pressure"] = bme.readPressure() / 100.0F;
-    root["humidity"] = bme.readHumidity();
-    root["voltage"] = voltage;
-
-    const char *timestampChar = timestamp.c_str();
-    root["date"] = timestampChar;
-
-    String message = "";
-    root.printTo(message);
-    return message;
+    SensorValues sensorValues;
+    sensorValues.temperature = bme.readTemperature();
+    sensorValues.pressure = bme.readPressure() / 100.0F;
+    sensorValues.humidity = bme.readHumidity();
+    return sensorValues;
 }
 
 #endif

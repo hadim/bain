@@ -14,4 +14,7 @@ const int loop_delay_s = 5 * 60;
 // Enable deep sleep
 const boolean deep_sleep = true;
 
+// Monitor battery level
+const boolean monitorBattery = true;
+
 #endif

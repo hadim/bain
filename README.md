@@ -14,7 +14,7 @@ Features:
 - Time is syncronized every 6h with NTP and the timezone can be set.
 - A timestamp string is added to sensor data before they are sent.
 - Deep sleep mode can be enabled to reduce power consumption. A standard battery of [1200 mAh](https://www.adafruit.com/product/258) can last few weeks/months (**Warning:** This still needs to be verified).
-- Voltage of the sensor is sent to the MQTT broker to monitor battery level.
+- mMonitor battery level (optional).
 - The source code is profusely commented and factorized. It should be easily to adapt to your needs.
 
 ## Instructions
@@ -44,18 +44,18 @@ You also need to install the following Arduino libraries (use the **Arduino Libr
 
 Set secret parameters:
 
-- Copy `src/secret.h.template` to `src/secret.h`.
-- Edit `src/secret.h` to set WiFi and MQTT parameters.
+- Copy `bain/secret.h.template` to `bain/secret.h`.
+- Edit `bain/secret.h` to set WiFi and MQTT parameters.
 
-Set also common parameters in `src/parameters.h`. Here you can for example disable or enable deep sleep mode.
+Set also common parameters in `bain/parameters.h`. Here you can for example disable or enable deep sleep mode.
 
 Now you're ready to flash your ESP8266 controller.
 
-- From you Arduino editor, open [`src/main.ino`](src/main.ino).
+- From you Arduino editor, open [`bain/bain.ino`](bain/bain.ino).
 - Compile it.
 - After connecting the ESP8266 board to your computer, upload the controller.
 
-By reading on the serial port, you should some log and also the JSON string sent to the MQTT broker:
+By reading on the serial port, you should see some log and also the JSON string sent to the MQTT broker:
 
 ```json
 {
@@ -63,13 +63,27 @@ By reading on the serial port, you should some log and also the JSON string sent
   "pressure": 1018.4,
   "humidty": 90.12,
   "timestamp": "2019-02-15 15:45:23",
-  "voltage": 2.16
+  "batteryLevel": "",
+  "batteryCharging": "",
+  "batteryVoltage": ""
 }
 ```
 
 ### Final Assembly
 
-Once you've checked that everything works you can assemble both chips with a [FeatherWing proto board](https://www.adafruit.com/product/2884).
+Once you've checked that everything works you can assemble everything together using a [FeatherWing proto board](https://www.adafruit.com/product/2884).
+
+## Battery Level Monitoring
+
+**NOTE: Work In Progress.**
+
+If you want to monitor the LiPo battery level, you need to add some connections to your circuit as below.
+
+TODO
+
+Then you need to set `monitorBattery` to `true` in `parameters.h`. You can also read a LiPo battery level from any Huzzah ESP8266 board by flashing `utils/battery/battery.ino`.
+
+This setup comes from https://github.com/lobeck/adafruit-feather-huzzah-8266-battery-monitor.
 
 ## Home Assistant
 
@@ -95,6 +109,8 @@ sensor:
     unit_of_measurement: 'hPa'
     value_template: "{{ value_json.pressure }}"
 ```
+
+You can add more values from the JSON string if you want.
 
 ## License
 
