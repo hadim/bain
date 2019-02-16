@@ -17,98 +17,98 @@ const int loop_delay_ms = loop_delay_s * 1000;
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial)
-    ;
+    Serial.begin(115200);
+    while (!Serial)
+        ;
 
-  // Clean console.
-  Serial.println("");
+    // Clean console.
+    Serial.println("");
 
-  // Connect to WiFi and print some informations
-  // about the connection.
-  connectWifi(wifi_ssid, wifi_password);
-  logWifiInformations();
+    // Connect to WiFi and print some informations
+    // about the connection.
+    connectWifi(wifi_ssid, wifi_password);
+    logWifiInformations();
 
-  // Init BME280 sensor.
-  initBME280Sensor();
+    // Init BME280 sensor.
+    initBME280Sensor();
 
-  // Init NTP
-  initNTP();
+    // Init NTP
+    initNTP();
 
-  if (deep_sleep == true)
-  {
-    one_step();
-    disconnectMQTT();
-    disconnectWifi();
-    ESP.deepSleep(loop_delay_ms * 1e3);
-  }
+    if (deep_sleep == true)
+    {
+        one_step();
+        disconnectMQTT();
+        disconnectWifi();
+        ESP.deepSleep(loop_delay_ms * 1e3);
+    }
 }
 
 void loop()
 {
-  if (deep_sleep == false)
-  {
-    one_step();
-    delay(loop_delay_ms);
-  }
+    if (deep_sleep == false)
+    {
+        one_step();
+        delay(loop_delay_ms);
+    }
 }
 
 void one_step()
 {
-  // Update time if needed.
-  updateNTP();
+    // Update time if needed.
+    updateNTP();
 
-  // Check in case WiFi has been disconnected.
-  connectWifi(wifi_ssid, wifi_password);
+    // Check in case WiFi has been disconnected.
+    connectWifi(wifi_ssid, wifi_password);
 
-  // Get a timestamp.
-  String timestamp = getTimeStampString();
+    // Get a timestamp.
+    String timestamp = getTimeStampString();
 
-  // Measure battery level
-  BatteryLevel batteryLevel;
-  if (monitorBattery)
-  {
-    batteryLevel = measureBatteryLevel();
-  }
+    // Measure battery level
+    BatteryLevel batteryLevel;
+    if (monitorBattery)
+    {
+        batteryLevel = measureBatteryLevel();
+    }
 
-  // Get sensor values.
-  SensorValues sensorValues = getSensorValues();
+    // Get sensor values.
+    SensorValues sensorValues = getSensorValues();
 
-  // Convert values to JSON string.
-  String message = packToJSON(timestamp, sensorValues, batteryLevel);
+    // Convert values to JSON string.
+    String message = packToJSON(timestamp, sensorValues, batteryLevel);
 
-  // Send JSON to MQTT broker.
-  sendMessage(message, true);
+    // Send JSON to MQTT broker.
+    sendMessage(message, true);
 }
 
 String packToJSON(String timestamp, SensorValues sensorValues, BatteryLevel batteryLevel)
 {
-  // Create JSON object.
-  const size_t capacity = JSON_OBJECT_SIZE(7) + 90;
-  DynamicJsonBuffer jsonBuffer(capacity);
-  JsonObject &root = jsonBuffer.createObject();
+    // Create JSON object.
+    const size_t capacity = JSON_OBJECT_SIZE(7) + 90;
+    DynamicJsonBuffer jsonBuffer(capacity);
+    JsonObject &root = jsonBuffer.createObject();
 
-  root["temperature"] = sensorValues.temperature;
-  root["pressure"] = sensorValues.pressure;
-  root["humidity"] = sensorValues.humidity;
+    root["temperature"] = sensorValues.temperature;
+    root["pressure"] = sensorValues.pressure;
+    root["humidity"] = sensorValues.humidity;
 
-  if (batteryLevel._valid)
-  {
-    root["batteryLevel"] = batteryLevel.level;
-    root["batteryCharging"] = batteryLevel.isCharging;
-    root["batteryVoltage"] = batteryLevel.realVoltage;
-  }
-  else
-  {
-    root["batteryLevel"] = "";
-    root["batteryCharging"] = "";
-    root["batteryVoltage"] = "";
-  }
+    if (batteryLevel._valid)
+    {
+        root["batteryLevel"] = batteryLevel.level;
+        root["batteryCharging"] = batteryLevel.isCharging;
+        root["batteryVoltage"] = batteryLevel.realVoltage;
+    }
+    else
+    {
+        root["batteryLevel"] = "";
+        root["batteryCharging"] = "";
+        root["batteryVoltage"] = "";
+    }
 
-  const char *timestampChar = timestamp.c_str();
-  root["timestamp"] = timestampChar;
+    const char *timestampChar = timestamp.c_str();
+    root["timestamp"] = timestampChar;
 
-  String message = "";
-  root.printTo(message);
-  return message;
+    String message = "";
+    root.printTo(message);
+    return message;
 }
