@@ -1,0 +1,22 @@
+language: c
+sudo: false
+cache:
+  directories:
+    - ~/arduino_ide
+    - ~/.arduino15/packages/
+git:
+  depth: false
+  quiet: true
+env:
+  global:
+     - ARDUINO_IDE_VERSION="1.8.8"
+before_install:
+  - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+install:
+  - arduino --install-library "Adafruit ESP8266"
+  - arduino --install-library "Adafruit BME280 Library"
+  - arduino --install-library "Adafruit Unified Sensor"
+  - arduino --install-library "ArduinoJson"
+  - arduino --install-library "NTPClient"
+script:
+  - build_main_platform esp8266

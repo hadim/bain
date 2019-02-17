@@ -1,4 +1,5 @@
 # Bain
+[![Build Status](https://travis-ci.com/hadim/bain.svg?token=fC6e2psPPR69RiF4UxYh&branch=master)](https://travis-ci.com/hadim/bain)
 
 A DIY IoT wireless sensor for temperature, humidity and pressure. It is made of two parts:
 
