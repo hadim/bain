@@ -19,4 +19,4 @@ install:
   - arduino --install-library "ArduinoJson"
   - arduino --install-library "NTPClient"
 script:
-  - build_main_platform esp8266
+  - build_platform esp8266
