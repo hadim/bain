@@ -19,4 +19,5 @@ install:
   - arduino --install-library "ArduinoJson"
   - arduino --install-library "NTPClient"
 script:
+  - copy bain/secret.h.template bain/secret.h
   - build_platform esp8266
