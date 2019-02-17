@@ -16,7 +16,7 @@ install:
   - arduino --install-library "Adafruit ESP8266"
   - arduino --install-library "Adafruit BME280 Library"
   - arduino --install-library "Adafruit Unified Sensor"
-  - arduino --install-library "ArduinoJson":5.13.4
+  - arduino --install-library "ArduinoJson" 5.13.4
   - arduino --install-library "NTPClient"
 script:
   - cp bain/secret.h.template bain/secret.h
