@@ -65,9 +65,9 @@ By reading on the serial port, you should see logging messages and also the JSON
   "pressure": 1018.4,
   "humidty": 90.12,
   "timestamp": "2019-02-15 15:45:23",
-  "batteryLevel": "",
-  "batteryCharging": "",
-  "batteryVoltage": ""
+  "batteryLevel": 82.3,
+  "batteryCharging": false,
+  "batteryVoltage": 3.76
 }
 ```
 
@@ -86,7 +86,9 @@ If you want to monitor the LiPo battery level, you need to add some connections 
 - 1 x 1MΩ resistor
 - 1 x 1µF capacitor
 
-TODO: add drawing.
+![Feather ESP8266](fritzing/bain_battery_monitor_bb.png)
+
+**Warning:** This diagram doesn't show the connections with the BME280 chips. I will share it once I figure out what's the best way to connect everything together.
 
 Then you need to set `monitorBattery` to `true` in `bain/parameters.h`.
 
