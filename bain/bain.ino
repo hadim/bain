@@ -72,6 +72,7 @@ void one_step()
     }
 
     // Get sensor values.
+    //SensorValues sensorValues;
     SensorValues sensorValues = getSensorValues();
 
     // Convert values to JSON string.

@@ -5,11 +5,11 @@
 
 struct BatteryLevel
 {
-    int rawLevel;
-    int level;
-    int realVoltage;
+    float rawLevel;
+    float level;
+    float realVoltage;
     bool isCharging;
-    //Only for internal use.
+    // Only for internal use.
     bool _valid = false;
 };
 

@@ -3,7 +3,7 @@
 
 A DIY IoT wireless sensor for temperature, humidity and pressure. It is made of two parts:
 
-- [Adafruit Feather HUZZAH with ESP8266](https://www.adafruit.com/product/2821): it's an Arduino compatible board that has WiFi capability and a connector to plug any Adafruit 3.7V Lithium polymer batteries.
+- [Adafruit Feather HUZZAH with ESP8266](https://www.adafruit.com/product/2821): it's an Arduino compatible board that has WiFi capability and a connector to plug any Adafruit 3.7V Lithium polymer batteries. Note that any ESP8266 board should work.
 - [Adafruit BME280 I2C or SPI](https://www.adafruit.com/product/2652): It's an environmental sensor with temperature, barometric pressure and humidity from Bosch.
 
 This repository contains all the instructions to build the Bain sensor yourself.
@@ -12,9 +12,9 @@ This repository contains all the instructions to build the Bain sensor yourself.
 
 - Monitor temperature, pressure and humidity.
 - Data are sent to a custom MQTT broker as a JSON string.
-- Monitor battery level (optional).
-- Deep sleep mode can be enabled to reduce power consumption. A standard LiPo battery of [1200 mAh](https://www.adafruit.com/product/258) can last about a week. Consumption is ~6.5mA while in deep sleep mode (optional).
 - Time is syncronized every 6h with NTP and the timezone can be specified.
+- Deep sleep mode can be enabled to reduce power consumption. A standard LiPo battery of [1200 mAh](https://www.adafruit.com/product/258) can last about a week. Consumption is ~6.5mA while in deep sleep mode (optional).
+- Monitor battery level (optional).
 - The source code is profusely commented and factorized. It should be easily to adapt to your needs.
 
 ## Instructions
@@ -82,13 +82,13 @@ Once you've checked that everything works you can solder everything together usi
 If you want to monitor the LiPo battery level, you need to add some connections to your circuit as shown below. For this you need the following parts:
 
 - 1 x 10kΩ resistor
-- 1 x 48kΩ resistor
+- 1 x 47kΩ resistor
 - 1 x 1MΩ resistor
 - 1 x 1µF capacitor
 
 TODO: add drawing.
 
-Then you need to set `monitorBattery` to `true` in `bain/parameters.h`. You can also read a LiPo battery level from any Huzzah ESP8266 board by flashing `utils/battery/battery.ino`.
+Then you need to set `monitorBattery` to `true` in `bain/parameters.h`.
 
 *This setup comes from https://github.com/lobeck/adafruit-feather-huzzah-8266-battery-monitor.*
 
