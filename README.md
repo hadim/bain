@@ -71,13 +71,7 @@ By reading on the serial port, you should see logging messages and also the JSON
 }
 ```
 
-### Final Assembly
-
-Once you've checked that everything works you can solder everything together using a [FeatherWing proto board](https://www.adafruit.com/product/2884).
-
 ### Battery Level Monitoring
-
-**NOTE: Work In Progress.**
 
 If you want to monitor the LiPo battery level, you need to add some connections to your circuit as shown below. For this you need the following parts:
 
@@ -88,11 +82,21 @@ If you want to monitor the LiPo battery level, you need to add some connections 
 
 ![Feather ESP8266](fritzing/bain_battery_monitor_bb.png)
 
-**Warning:** This diagram doesn't show the connections with the BME280 chips. I will share it once I figure out what's the best way to connect everything together.
-
 Then you need to set `monitorBattery` to `true` in `bain/parameters.h`.
 
 *This setup comes from https://github.com/lobeck/adafruit-feather-huzzah-8266-battery-monitor.*
+
+### Final Assembly
+
+Once you've checked that everything works you can solder everything together using a [FeatherWing proto board](https://www.adafruit.com/product/2884).
+
+Here is the final assembly.
+
+![Bain Final Assembly](fritzing/bain_final_assembly_bb.png)
+
+## Case
+
+**TODO.**
 
 ## Home Assistant
 
