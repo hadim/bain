@@ -8,14 +8,14 @@ A DIY IoT wireless sensor for temperature, humidity and pressure. It is made of 
 
 This repository contains all the instructions to build the Bain sensor yourself.
 
-**Features**:
+## Features
 
 - 🌡 Monitor **temperature**, **pressure** and **humidity**.
 - ✈ Data are sent to a custom **MQTT** broker as a **JSON** string.
 - 🕕 **Time is syncronized** every 6h with NTP and the **timezone** can be specified.
 - 💤 Deep sleep mode can be enabled to reduce power consumption. A standard LiPo battery of [1200 mAh](https://www.adafruit.com/product/258) can last about a week. Consumption is ~6.5mA while in deep sleep mode (optional).
 - 🔋 Monitor battery level (optional).
-- © The source code is profusely commented and factorized. It should be easily to adapt to your needs.
+- 💡 The source code is profusely commented and factorized. It should be easily to adapt to your needs.
 
 ## Instructions
 
