@@ -32,7 +32,7 @@ void initBME280Sensor()
 
     if (!bme.begin())
     {
-        int max_try = 50;
+        int max_try = 10;
         int i = 0;
         while (!bme.begin() && i < max_try)
         {
