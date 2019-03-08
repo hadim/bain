@@ -89,9 +89,18 @@ String packToJSON(String timestamp, SensorValues sensorValues, BatteryLevel batt
     DynamicJsonBuffer jsonBuffer(capacity);
     JsonObject &root = jsonBuffer.createObject();
 
-    root["temperature"] = sensorValues.temperature;
-    root["pressure"] = sensorValues.pressure;
-    root["humidity"] = sensorValues.humidity;
+    if (sensorValues._valid)
+    {
+        root["temperature"] = sensorValues.temperature;
+        root["pressure"] = sensorValues.pressure;
+        root["humidity"] = sensorValues.humidity;
+    }
+    else
+    {
+        root["temperature"] = "";
+        root["pressure"] = "";
+        root["humidity"] = "";
+    }
 
     if (batteryLevel._valid)
     {

@@ -23,6 +23,7 @@ struct SensorValues
     float temperature;
     float pressure;
     float humidity;
+    boolean _valid = false;
 };
 
 void initBME280Sensor()
@@ -31,22 +32,32 @@ void initBME280Sensor()
 
     if (!bme.begin())
     {
-        while (!bme.begin())
+        int max_try = 50;
+        int i = 0;
+        while (!bme.begin() && i < max_try)
         {
             delay(500);
             Serial.print(".");
+            i++;
         }
         Serial.println("");
     }
 
-    Serial.println("[BME280] - Sensor found.");
+    if (bme.begin())
+    {
+        Serial.println("[BME280] - Sensor found.");
 
-    // Weather monitoring settings
-    bme.setSampling(Adafruit_BME280::MODE_FORCED,
-                    Adafruit_BME280::SAMPLING_X1, // temperature
-                    Adafruit_BME280::SAMPLING_X1, // pressure
-                    Adafruit_BME280::SAMPLING_X1, // humidity
-                    Adafruit_BME280::FILTER_OFF);
+        // Weather monitoring settings
+        bme.setSampling(Adafruit_BME280::MODE_FORCED,
+                        Adafruit_BME280::SAMPLING_X1, // temperature
+                        Adafruit_BME280::SAMPLING_X1, // pressure
+                        Adafruit_BME280::SAMPLING_X1, // humidity
+                        Adafruit_BME280::FILTER_OFF);
+    }
+    else
+    {
+        Serial.println("[BME280] - Sensor not found.");
+    }
 }
 
 void logSensorValues(String timestamp)
@@ -71,20 +82,26 @@ void logSensorValues(String timestamp)
 
 SensorValues getSensorValues()
 {
-    // Only needed in forced mode!
-    // In normal mode, you can remove the next line.
-    // Has no effect in normal mode
-    bme.takeForcedMeasurement();
-
-    // Read values twice to avoid NaN;
-    bme.readTemperature();
-    bme.readPressure();
-    bme.readHumidity();
-
     SensorValues sensorValues;
-    sensorValues.temperature = bme.readTemperature();
-    sensorValues.pressure = bme.readPressure() / 100.0F;
-    sensorValues.humidity = bme.readHumidity();
+
+    if (bme.begin())
+    {
+        // Only needed in forced mode!
+        // In normal mode, you can remove the next line.
+        // Has no effect in normal mode
+        bme.takeForcedMeasurement();
+
+        // Read values twice to avoid NaN;
+        bme.readTemperature();
+        bme.readPressure();
+        bme.readHumidity();
+
+        sensorValues.temperature = bme.readTemperature();
+        sensorValues.pressure = bme.readPressure() / 100.0F;
+        sensorValues.humidity = bme.readHumidity();
+        sensorValues._valid = true;
+    }
+
     return sensorValues;
 }
 

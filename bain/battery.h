@@ -38,6 +38,11 @@ BatteryLevel measureBatteryLevel()
     // Convert battery level to percent.
     batteryLevel.level = map(batteryLevel.rawLevel, min_voltage, max_voltage, 0, 100);
 
+    if (battery.level < 0)
+    {
+        return batteryLevel;
+    }
+
     // I'd like to report back the real voltage, so apply some math to get it back
     // 1. convert the ADC level to a float
     // 2. divide by (R2 / R1 + R2)

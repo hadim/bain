@@ -33,7 +33,8 @@ void logSignalStrenght()
 {
     // Print the received signal strength.
     Serial.print("[Wifi] - Signal strength (RSSI): ");
-    Serial.println(WiFi.RSSI());
+    Serial.print(WiFi.RSSI());
+    Serial.println(" dBm");
 }
 
 void logEncryption()
