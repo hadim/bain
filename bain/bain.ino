@@ -24,13 +24,13 @@ void setup()
     // Clean console.
     Serial.println("");
 
+    // Init BME280 sensor.
+    initBME280Sensor();
+
     // Connect to WiFi and print some informations
     // about the connection.
     connectWifi(wifi_ssid, wifi_password);
     logWifiInformations();
-
-    // Init BME280 sensor.
-    initBME280Sensor();
 
     // Init NTP
     initNTP();
