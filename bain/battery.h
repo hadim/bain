@@ -38,7 +38,7 @@ BatteryLevel measureBatteryLevel()
     // Convert battery level to percent.
     batteryLevel.level = map(batteryLevel.rawLevel, min_voltage, max_voltage, 0, 100);
 
-    if (battery.level < 0)
+    if (batteryLevel.level < 0)
     {
         return batteryLevel;
     }
