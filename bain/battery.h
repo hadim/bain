@@ -52,6 +52,11 @@ BatteryLevel measureBatteryLevel()
     // as the voltage will be 5V, so we assume it's charging.
     batteryLevel.isCharging = batteryLevel.rawLevel > 800 ? 1 : 0;
 
+    if (batteryLevel.isCharging)
+    {
+        batteryLevel.level = 100;
+    }
+
     batteryLevel._valid = true;
 
     return batteryLevel;
