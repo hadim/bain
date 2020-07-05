@@ -11,7 +11,6 @@ const int mqtt_port = MQTT_PORT;
 const char *mqtt_username = MQTT_USERNAME;
 const char *mqtt_password = MQTT_PASSWORD;
 const char *mqtt_client_id = MQTT_CLIENT_ID;
-const char *mqtt_message_topic = MQTT_MESSAGE_TOPIC;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -71,7 +70,7 @@ boolean connectMQTT()
     }
 }
 
-boolean sendMessage(String message, boolean printValues)
+boolean sendMessage(String message, String mqtt_message_topic, boolean printValues)
 {
     boolean isConnected = client.connected();
     if (!isConnected)
@@ -93,7 +92,7 @@ boolean sendMessage(String message, boolean printValues)
     int i = 0;
     const boolean retain = true;
 
-    messageSent = client.publish(mqtt_message_topic, msg, retain);
+    messageSent = client.publish(mqtt_message_topic.c_str(), msg, retain);
 
     while (!messageSent && (i <= maximum_try))
     {
@@ -101,7 +100,7 @@ boolean sendMessage(String message, boolean printValues)
         delay(2000);
 
         connectMQTT();
-        messageSent = client.publish(mqtt_message_topic, msg, retain);
+        messageSent = client.publish(mqtt_message_topic.c_str(), msg, retain);
         i++;
     }
 

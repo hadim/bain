@@ -1,4 +1,5 @@
 # Bain
+
 [![Build Status](https://travis-ci.com/hadim/bain.svg?token=fC6e2psPPR69RiF4UxYh&branch=master)](https://travis-ci.com/hadim/bain)
 
 A DIY IoT wireless sensor for temperature, humidity and pressure. It is made of two parts:
@@ -42,9 +43,8 @@ You should use the [Arduino IDE](https://www.arduino.cc/en/main/software) to fla
   - [Adafruit ESP8266](https://github.com/adafruit/Adafruit_ESP8266): Arduino board with WiFi capability.
   - [Adafruit BME280 Library](https://github.com/adafruit/Adafruit_BME280_Library): Sensor library.
   - [Adafruit Unified Sensor](https://github.com/adafruit/Adafruit_Sensor): Needed for Adafruit BME280 Library.
-  - [ArduinoJson](https://github.com/bblanchon/ArduinoJson): a JSON library. **Warning**: as of today (06/02/2019), you should install version 5 only and not version 6.
+  - [ArduinoJson](https://github.com/bblanchon/ArduinoJson): a JSON library.
   - [NTPClient](https://github.com/arduino-libraries/NTPClient): an NTP client library to get date and time.
-  - [PubSubClient](https://github.com/knolleary/pubsubclient): MQTT Client. This library has been integrated into the source code since the `MQTT_MAX_PACKET_SIZE` variable must be increased to `512` ([commit used](https://github.com/knolleary/pubsubclient/tree/26ce89fa476da85399b736f885274d67676dacb8)).
 
 #### Controller Configuration
 
@@ -97,7 +97,7 @@ const int state_LED = -1;
 #endif
 ```
 
-#### Flash It!
+#### Upload Firmware
 
 Now you're ready to flash the controller.
 
@@ -132,7 +132,7 @@ If you want to monitor the LiPo battery level, you need to add some connections 
 
 Then you need to set `monitorBattery` to `true` in `bain/parameters.h`.
 
-*This setup comes from https://github.com/lobeck/adafruit-feather-huzzah-8266-battery-monitor.*
+_This setup comes from https://github.com/lobeck/adafruit-feather-huzzah-8266-battery-monitor._
 
 ### Final Assembly
 
@@ -146,30 +146,7 @@ Once you've checked your assembly works you can solder everything together using
 
 ## Home Assistant
 
-If you are using [Home Assistant](https://www.home-assistant.io) to retrieve the sensor values through an MQTT broker, here is the `sensor` configuration you can use:
-
-```yaml
-sensor:
-  - platform: mqtt
-    name: bain_sensor1_temperature
-    state_topic: "/bain_sensor/1"
-    unit_of_measurement: '°C'
-    value_template: "{{ value_json.temperature }}"
-
-  - platform: mqtt
-    name: bain_sensor1_humidity
-    state_topic: "/bain_sensor/1"
-    unit_of_measurement: '%'
-    value_template: "{{ value_json.humidity }}"
-
-  - platform: mqtt
-    name: bain_sensor1_pressure
-    state_topic: "/bain_sensor/1"
-    unit_of_measurement: 'hPa'
-    value_template: "{{ value_json.pressure }}"
-```
-
-You can add more values from the JSON string if you want.
+If your MQTT broker is connected to an [Home Assistant](https://www.home-assistant.io) instance, Bain sensors should be automatically discovered.
 
 ## License
 

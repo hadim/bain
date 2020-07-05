@@ -1,14 +1,20 @@
 #ifndef BAIN_PARAMETERS
 #define BAIN_PARAMETERS
 
+// Sensor configuration
+String sensor_name = "Bain Environmental Sensor";
+String sensor_manufacturer = "hadim";
+String sensor_version = "1.0.0";
+String device_id = "bain_living_room";
+
 // Timezone
 const int timeOffsetHours = -5;
 
 // Delay between two measures in seconds.
-const int loop_delay_s = 60;
+const int loop_delay_s = 10;
 
 // Enable deep sleep mode.
-const boolean deep_sleep = true;
+const boolean deep_sleep = false;
 
 // Monitor battery level.
 const boolean monitorBattery = true;
