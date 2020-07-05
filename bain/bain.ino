@@ -86,8 +86,7 @@ String packToJSON(String timestamp, SensorValues sensorValues, BatteryLevel batt
 {
     // Create JSON object.
     const size_t capacity = JSON_OBJECT_SIZE(7) + 90;
-    DynamicJsonBuffer jsonBuffer(capacity);
-    JsonObject &root = jsonBuffer.createObject();
+    DynamicJsonDocument root(capacity);
 
     if (sensorValues._valid)
     {
@@ -119,6 +118,6 @@ String packToJSON(String timestamp, SensorValues sensorValues, BatteryLevel batt
     root["timestamp"] = timestampChar;
 
     String message = "";
-    root.printTo(message);
+    serializeJson(root, message);
     return message;
 }

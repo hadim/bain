@@ -8,7 +8,7 @@ const int timeOffsetHours = -5;
 const int loop_delay_s = 60;
 
 // Enable deep sleep mode.
-const boolean deep_sleep = true;
+const boolean deep_sleep = false;
 
 // Monitor battery level.
 const boolean monitorBattery = true;
