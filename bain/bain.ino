@@ -49,6 +49,8 @@ void loop()
     if (deep_sleep == false)
     {
         one_step();
+        disconnectMQTT();
+        disconnectWifi();
         delay(loop_delay_ms);
     }
 }
